@@ -1,8 +1,9 @@
 import { initializeApp } from "firebase/app";
 import {
   getAuth,
-  signInWithRedirect,
   signInWithPopup,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
   GoogleAuthProvider,
 } from "firebase/auth";
 
@@ -29,11 +30,20 @@ export const auth = getAuth();
 // console.log("this is auth from getAuth", auth);
 
 export const signInWithGooglePopup = () => signInWithPopup(auth, provider);
+export const createNewUserWithEmailAndPassword = async (email, password) => {
+  if (!email || !password) return;
+  return await createUserWithEmailAndPassword(auth, email, password);
+};
+export const signInWithUserEmailandPassword = async (email, password) => {
+  if (!email || !password) return;
+  return await signInWithEmailAndPassword(auth, email, password);
+};
 
 export const clothingDB = getFirestore();
 // console.log("this is clothingDB", clothingDB);
 
-export const createUserDocumentFromAuth = async userAuth => {
+export const createUserDocumentFromAuth = async (userAuth, additionalInfo) => {
+  if (!userAuth) return;
   const userDocRef = doc(clothingDB, "users", userAuth.uid);
   console.log(userDocRef);
   const userSnapshot = await getDoc(userDocRef);
@@ -48,6 +58,7 @@ export const createUserDocumentFromAuth = async userAuth => {
         displayName,
         email,
         createdAt,
+        ...additionalInfo,
       });
     } catch (err) {
       console.log("error creating user", err);
@@ -55,11 +66,3 @@ export const createUserDocumentFromAuth = async userAuth => {
   }
   return userDocRef;
 };
-
-// export const testFunc = async userAuth => {
-//   const testRef = doc(clothingDB, "tests-coll", "test-doc");
-//   console.log(testRef);
-//   const testSnapshot = await getDoc(testRef);
-//   console.log(testSnapshot);
-//   console.log(testSnapshot.exists());
-// };
