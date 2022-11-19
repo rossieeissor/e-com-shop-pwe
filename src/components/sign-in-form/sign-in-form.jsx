@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 
 import {
   signInWithGooglePopup,
-  createUserDocumentFromAuth,
   signInWithUserEmailandPassword,
 } from "../../utils/firebase/firebase.utils";
 import Button from "../button/button.componnet";
@@ -20,14 +19,14 @@ export default function SignInForm() {
   const [formFields, setFormFields] = useState(defaultFormFields);
   const { email, password } = formFields;
 
-  let navigate = useNavigate();
+  // let navigate = useNavigate();
 
   const handleSubmit = async event => {
     event.preventDefault();
     try {
       const response = await signInWithUserEmailandPassword(email, password);
       setFormFields(defaultFormFields);
-      navigate("/shop");
+      // navigate("/shop");
     } catch (error) {
       if (error.code === "auth/user-not-found") {
         alert("email not found");
@@ -41,9 +40,7 @@ export default function SignInForm() {
   };
 
   const signInWithGoogle = async () => {
-    const { user } = await signInWithGooglePopup();
-    console.log(user);
-    await createUserDocumentFromAuth(user);
+    await signInWithGooglePopup();
   };
 
   const handleChange = event => {
