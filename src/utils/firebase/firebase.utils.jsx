@@ -9,7 +9,14 @@ import {
   onAuthStateChanged,
 } from "firebase/auth";
 
-import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+  getDocs,
+  collection,
+} from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCDfhYmbG_qjMSUn_vHlX09n7RcsUz6Bo8",
@@ -69,4 +76,12 @@ export const createUserDocumentFromAuth = async (userAuth, additionalInfo) => {
     }
   }
   return userDocRef;
+};
+
+export const fetchHatsFromDataBase = async () => {
+  const docRef = doc(clothingDB, "categories", "hats");
+  const docSnap = await getDoc(docRef);
+  const hats = docSnap.data().items;
+
+  return hats;
 };
