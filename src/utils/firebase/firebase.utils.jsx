@@ -14,8 +14,9 @@ import {
   doc,
   getDoc,
   setDoc,
-  getDocs,
   collection,
+  query,
+  getDocs,
 } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -85,3 +86,18 @@ export const fetchHatsFromDataBase = async () => {
 
   return hats;
 };
+
+export const getCategoriesAndDocuments = async () => {
+  const collectionRef = collection(clothingDB, "categories");
+  const q = query(collectionRef);
+
+  const querySnapshot = await getDocs(q);
+  const categoryMap = querySnapshot.docs.reduce((acc, docSnapshot) => {
+    const { title, items } = docSnapshot.data();
+    acc[title.toLowerCase()] = items;
+    return acc;
+  }, {});
+  return categoryMap;
+};
+
+getCategoriesAndDocuments();
