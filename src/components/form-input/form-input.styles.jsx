@@ -3,10 +3,23 @@ import styled from "styled-components/macro";
 const subColor = `grey`;
 const mainColor = `black`;
 
-const shrinkLabel = `
+const shrinkLabelStyles = `
 top: -14px;
 font-size: 12px;
 color: ${mainColor};
+`;
+
+export const FormInputLabel = styled.label`
+  color: ${subColor};
+  font-size: 16px;
+  font-weight: normal;
+  position: absolute;
+  pointer-events: none;
+  left: 5px;
+  top: 10px;
+  transition: 300ms ease all;
+
+  ${({ shrink }) => shrink && shrinkLabelStyles}
 `;
 
 export const Group = styled.div`
@@ -15,24 +28,9 @@ export const Group = styled.div`
   input[type="password"] {
     letter-spacing: 0.3em;
   }
-
-  .form-input-label {
-    color: ${subColor};
-    font-size: 16px;
-    font-weight: normal;
-    position: absolute;
-    pointer-events: none;
-    left: 5px;
-    top: 10px;
-    transition: 300ms ease all;
-
-    &.shrink {
-      ${shrinkLabel};
-    }
-  }
 `;
 
-export const FormInputStyle = styled.input`
+export const Input = styled.input`
   background: none;
   background-color: white;
   color: ${subColor};
@@ -49,8 +47,8 @@ export const FormInputStyle = styled.input`
     outline: none;
   }
 
-  &:focus ~ .form-input-label {
-    ${shrinkLabel};
+  &:focus ~ ${FormInputLabel} {
+    ${shrinkLabelStyles};
   }
 `;
 

@@ -25,7 +25,7 @@ const Navigation = () => {
     <>
       <NavigationContainer>
         <LogoContainer to="/">
-          <CrwnLogo className="logo" />
+          <CrwnLogo />
         </LogoContainer>
         <NavLinks>
           <Navlink to="/shop">SHOP</Navlink>
