@@ -28,7 +28,7 @@ const firebaseConfig = {
   appId: "1:1081277642227:web:cace823ee9a62c4e7e4e86",
 };
 
-const firebaseApp = initializeApp(firebaseConfig);
+initializeApp(firebaseConfig);
 // console.log("this is firebaseApp", firebaseApp);
 
 const provider = new GoogleAuthProvider();
@@ -50,9 +50,6 @@ export const signInWithUserEmailandPassword = async (email, password) => {
 };
 
 export const signOutUser = async () => await signOut(auth);
-
-export const onAuthStateChangedListener = callback =>
-  onAuthStateChanged(auth, callback);
 
 export const clothingDB = getFirestore();
 // console.log("this is clothingDB", clothingDB);
@@ -76,7 +73,7 @@ export const createUserDocumentFromAuth = async (userAuth, additionalInfo) => {
       console.log("error creating user", err);
     }
   }
-  return userDocRef;
+  return userSnapshot;
 };
 
 export const fetchHatsFromDataBase = async () => {
@@ -87,10 +84,26 @@ export const fetchHatsFromDataBase = async () => {
   return hats;
 };
 
-export const getCategoriesAndDocuments = async () => {
-  const collectionRef = collection(clothingDB, "categories");
+export const getCategoriesAndDocuments = async collectionString => {
+  const collectionRef = collection(clothingDB, collectionString);
   const q = query(collectionRef);
 
   const querySnapshot = await getDocs(q);
   return querySnapshot.docs.map(docSnapshot => docSnapshot.data());
+};
+
+export const onAuthStateChangedListener = callback =>
+  onAuthStateChanged(auth, callback);
+
+export const getCurrentUser = () => {
+  return new Promise((resolve, reject) => {
+    const unsubscribe = onAuthStateChanged(
+      auth,
+      userAuth => {
+        unsubscribe();
+        resolve(userAuth);
+      },
+      reject
+    );
+  });
 };
