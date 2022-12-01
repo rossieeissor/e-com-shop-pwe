@@ -57,7 +57,7 @@ export const clothingDB = getFirestore();
 export const createUserDocumentFromAuth = async (userAuth, additionalInfo) => {
   if (!userAuth) return;
   const userDocRef = doc(clothingDB, "users", userAuth.uid);
-  const userSnapshot = await getDoc(userDocRef);
+  let userSnapshot = await getDoc(userDocRef);
 
   if (!userSnapshot.exists()) {
     try {
@@ -69,6 +69,7 @@ export const createUserDocumentFromAuth = async (userAuth, additionalInfo) => {
         createdAt,
         ...additionalInfo,
       });
+      userSnapshot = await getDoc(userDocRef);
     } catch (err) {
       console.log("error creating user", err);
     }

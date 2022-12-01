@@ -8,6 +8,9 @@ import {
   getCurrentUser,
   createUserDocumentFromAuth,
   signInWithGooglePopup,
+  signInWithUserEmailandPassword,
+  createNewUserWithEmailAndPassword,
+  signOutUser,
 } from "../../utils/firebase/firebase.utils";
 
 export function* getSnapshotFromUserAuth(userAuth, additionalInfo) {
@@ -28,11 +31,6 @@ export function* getSnapshotFromUserAuth(userAuth, additionalInfo) {
   }
 }
 
-/*
-  create remaining sagas
-  as well as the corresponding components in order to move all of the signIn and signUp from google from Email and pass into our sagas and flow everything appropriately through our new getSnapshotFromUserAuth saga as well as remainig components code with the appropriate action flow. You may even need action types to get everithing to works
- */
-
 export function* isUserAuthenticated() {
   try {
     const userAuth = yield call(getCurrentUser);
@@ -43,17 +41,87 @@ export function* isUserAuthenticated() {
   }
 }
 
-export function* SignInWithGoogle() {
+export function* signInWithGoogle() {
   try {
-    const userAuth = yield call(signInWithGooglePopup);
-    console.log(userAuth);
+    const response = yield call(signInWithGooglePopup);
+    yield call(getSnapshotFromUserAuth, response.user);
   } catch (error) {
     yield put(signInFailed(error));
   }
 }
 
+export function* signInWithEmailAndPassword({ payload }) {
+  const { email, password } = payload;
+  try {
+    const response = yield call(
+      signInWithUserEmailandPassword,
+      email,
+      password
+    );
+    yield call(getSnapshotFromUserAuth, response.user);
+  } catch (error) {
+    yield put(signInFailed(error));
+    if (error.code === "auth/user-not-found") {
+      alert("email not found");
+    } else if (error.code === "auth/wrong-password") {
+      alert("wrong password");
+    } else {
+      alert("something goes wrong");
+      console.log("something wrong with login", error);
+    }
+  }
+}
+
+export function* signUpWithEmailAndPassword({ payload }) {
+  const { email, password, additionalInfo } = payload;
+  try {
+    const { user } = yield call(
+      createNewUserWithEmailAndPassword,
+      email,
+      password
+    );
+    yield call(getSnapshotFromUserAuth, user, additionalInfo);
+  } catch (error) {
+    yield put(signInFailed(error));
+    if (error.code === "auth/email-already-in-use") {
+      alert("email already in use");
+    } else if (error.code === "auth/weak-password") {
+      alert("password is too weak");
+    } else {
+      console.log("something wrong with creating new user:", error);
+    }
+  }
+}
+
+export function* signOutAuth() {
+  try {
+    yield call(signOutUser);
+    yield call(isUserAuthenticated);
+  } catch (error) {
+    yield put(signInFailed(error));
+  }
+}
+
+export function* onSignOut() {
+  yield takeLatest(USER_ACTION_TYPES.SIGN_OUT, signOutAuth);
+}
+
+export function* onSignUpWithEmailAndPassword() {
+  yield takeLatest(
+    USER_ACTION_TYPES.EMAIL_SIGN_UP_START,
+    signUpWithEmailAndPassword
+  );
+}
+
+export function* onsSignInWithEmailAndPassword() {
+  yield takeLatest(
+    USER_ACTION_TYPES.EMAIL_SIGN_IN_START,
+    signInWithEmailAndPassword
+  );
+}
+
 export function* onSignInWithGoogle() {
-  yield takeLatest(USER_ACTION_TYPES.GOOGLE_SIGN_IN_START, SignInWithGoogle);
+  yield takeLatest(USER_ACTION_TYPES.GOOGLE_SIGN_IN_START, signInWithGoogle);
 }
 
 export function* onCheckUserSession() {
@@ -61,5 +129,11 @@ export function* onCheckUserSession() {
 }
 
 export function* userSaga() {
-  yield all([call(onCheckUserSession), call(onSignInWithGoogle)]);
+  yield all([
+    call(onCheckUserSession),
+    call(onSignInWithGoogle),
+    call(onsSignInWithEmailAndPassword),
+    call(onSignUpWithEmailAndPassword),
+    call(onSignOut),
+  ]);
 }

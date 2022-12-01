@@ -13,8 +13,17 @@ export const googleSignInStart = () =>
 export const emailSignInStart = (email, password) =>
   createAction(USER_ACTION_TYPES.EMAIL_SIGN_IN_START, { email, password });
 
+export const emailSignUpStart = (email, password, additionalInfo) =>
+  createAction(USER_ACTION_TYPES.EMAIL_SIGN_UP_START, {
+    email,
+    password,
+    additionalInfo,
+  });
+
 export const signInSuccess = user =>
   createAction(USER_ACTION_TYPES.SIGN_IN_SUCCESS, user);
 
 export const signInFailed = error =>
   createAction(USER_ACTION_TYPES.SIGN_IN_FAILED, error);
+
+export const signOutstart = () => createAction(USER_ACTION_TYPES.SIGN_OUT);

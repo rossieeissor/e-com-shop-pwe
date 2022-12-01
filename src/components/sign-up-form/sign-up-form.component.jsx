@@ -1,12 +1,10 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 
 import FormInput from "../form-input/form-input.component";
 import Button from "../button/button.componnet";
 
-import {
-  createUserDocumentFromAuth,
-  createNewUserWithEmailAndPassword,
-} from "../../utils/firebase/firebase.utils";
+import { emailSignUpStart } from "../../store/user/user.action";
 
 import { SignUpContainer } from "./sign-up-form.styles";
 
@@ -20,31 +18,16 @@ const defaultFormFields = {
 const SignUpForm = () => {
   const [formFields, setFormFields] = useState(defaultFormFields);
   const { displayName, email, password, confirmPassword } = formFields;
+  const dispatch = useDispatch();
 
   const handleSubmit = async event => {
     event.preventDefault();
-
     if (password !== confirmPassword) {
       console.log("passwords do not match");
       return;
     }
-
-    try {
-      const { user } = await createNewUserWithEmailAndPassword(email, password);
-
-      await createUserDocumentFromAuth(user, {
-        displayName,
-      });
-      setFormFields(defaultFormFields);
-    } catch (error) {
-      if (error.code === "auth/email-already-in-use") {
-        alert("email already in use");
-      } else if (error.code === "auth/weak-password") {
-        alert("password is too weak");
-      } else {
-        console.log("something wrong with creating new user:", error);
-      }
-    }
+    dispatch(emailSignUpStart(email, password, { displayName }));
+    setFormFields(defaultFormFields);
   };
 
   const handleChange = event => {
