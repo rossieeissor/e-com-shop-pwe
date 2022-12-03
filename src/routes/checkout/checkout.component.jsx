@@ -1,47 +1,12 @@
 import { useSelector } from "react-redux";
 
-import CheckoutItem from "../../components/checkout-item/checkout-item.component";
-
-import {
-  selectCartItems,
-  selectCartTotal,
-} from "../../store/cart/cart.selector";
-
-import {
-  CheckoutContainer,
-  CheckoutHeader,
-  HeaderBlock,
-  Total,
-} from "./checkout.styles";
+import PaymentConfirmation from "../../components/payment-confirmation/payment-confirmation.component";
+import CheckoutCart from "../../components/checkout-cart/checkout-cart.component";
+import { selectIsPaymentSuccessful } from "../../store/payment/payment.selector";
 
 const Checkout = () => {
-  const cartItems = useSelector(selectCartItems);
-  const cartTotal = useSelector(selectCartTotal);
-  return (
-    <CheckoutContainer>
-      <CheckoutHeader>
-        <HeaderBlock>
-          <span>Product</span>
-        </HeaderBlock>
-        <HeaderBlock>
-          <span>Description</span>
-        </HeaderBlock>
-        <HeaderBlock>
-          <span>Quantity</span>
-        </HeaderBlock>
-        <HeaderBlock>
-          <span>Price</span>
-        </HeaderBlock>
-        <HeaderBlock>
-          <span>Remove</span>
-        </HeaderBlock>
-      </CheckoutHeader>
-      {cartItems.map(cartItem => (
-        <CheckoutItem key={cartItem.id} cartItem={cartItem} />
-      ))}
-      <Total>TOTAL: ${cartTotal}</Total>
-    </CheckoutContainer>
-  );
+  const isPaymentSuccessful = useSelector(selectIsPaymentSuccessful);
+  return isPaymentSuccessful ? <PaymentConfirmation /> : <CheckoutCart />;
 };
 
 export default Checkout;

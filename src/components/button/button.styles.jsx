@@ -1,5 +1,7 @@
 import styled from "styled-components/macro";
 
+import { SpinnerOverlay } from "../spinner/spinner.styles";
+
 export const BaseButton = styled.button`
   min-width: 165px;
   width: auto;
@@ -15,6 +17,8 @@ export const BaseButton = styled.button`
   cursor: pointer;
   display: flex;
   justify-content: center;
+  align-items: center;
+  padding: 0 20px;
 
   &:hover {
     background-color: white;
@@ -43,4 +47,9 @@ export const InvertedButton = styled(BaseButton)`
     color: white;
     border: none;
   }
+`;
+
+export const ButtonSpinner = styled(SpinnerOverlay)`
+  width: 30px;
+  height: 30px;
 `;
