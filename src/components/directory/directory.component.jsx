@@ -5,28 +5,28 @@ import { DirectoryContainer } from "./directory.styles";
 const categories = [
   {
     id: 1,
-    title: "hats",
-    imageUrl: "https://i.ibb.co/cvpntL1/hats.png",
+    title: "mouses",
+    imageUrl: "https://i.postimg.cc/8Crdpfrg/mouses1.png",
   },
   {
     id: 2,
-    title: "jackets",
-    imageUrl: "https://i.ibb.co/px2tCc3/jackets.png",
+    title: "keyboars",
+    imageUrl: "https://i.postimg.cc/T3sqvJ1c/keyboards1.jpg",
   },
   {
     id: 3,
-    title: "sneakers",
-    imageUrl: "https://i.ibb.co/0jqHpnp/sneakers.png",
+    title: "headsets",
+    imageUrl: "https://i.postimg.cc/L6N3NpMw/headsets1.jpg",
   },
   {
     id: 4,
-    title: "womens",
-    imageUrl: "https://i.ibb.co/GCCdy8t/womens.png",
+    title: "monitors",
+    imageUrl: "https://i.postimg.cc/bwrH5ByJ/monitors1.jpg",
   },
   {
     id: 5,
-    title: "mens",
-    imageUrl: "https://i.ibb.co/R70vBrQ/men.png",
+    title: "chairs",
+    imageUrl: "https://i.postimg.cc/VLYFqN2X/chairs1.jpg",
   },
 ];
 

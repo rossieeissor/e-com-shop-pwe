@@ -17,7 +17,9 @@ import {
   collection,
   query,
   getDocs,
+  writeBatch,
 } from "firebase/firestore";
+import { SHOP_DATA } from "../../shop-data";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCDfhYmbG_qjMSUn_vHlX09n7RcsUz6Bo8",
@@ -108,3 +110,16 @@ export const getCurrentUser = () => {
     );
   });
 };
+
+// const addCollectionAndDocuments = async (collectionKey, objectToAdd) => {
+//   const collectionRef = collection(clothingDB, collectionKey);
+//   const batch = writeBatch(clothingDB);
+
+//   objectToAdd.forEach(object => {
+//     const docRef = doc(collectionRef, object.title.toLowerCase());
+//     batch.set(docRef, object);
+//   });
+//   await batch.commit();
+//   console.log("done");
+// };
+// addCollectionAndDocuments("categories", SHOP_DATA);

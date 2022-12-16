@@ -1,5 +1,6 @@
 import styled from "styled-components/macro";
 import { Link } from "react-router-dom";
+import crwnLogo from "../../assets/Logo.jpg";
 
 export const NavigationContainer = styled.div`
   height: 70px;
@@ -9,12 +10,15 @@ export const NavigationContainer = styled.div`
   margin-bottom: 25px;
 `;
 
-export const LogoContainer = styled(Link)`
+export const Logo = styled(Link)`
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100%;
   width: 70px;
+  background: url(${crwnLogo});
+  background-size: auto;
+  background-size: 70px 100%;
 `;
 
 export const NavLinks = styled.div`
