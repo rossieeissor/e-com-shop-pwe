@@ -20,28 +20,30 @@ export const CATEGORIES_INITIAL_STATE: CategoriesState = {
 
 export const categoriesReducer = (
   state = CATEGORIES_INITIAL_STATE,
-  action = {} as AnyAction
+  action: AnyAction
 ): CategoriesState => {
-  if (fetchCategoriesStart.match(action)) {
+  if (fetchCategoriesStart.match(action))
     return {
       ...state,
       isLoading: true,
     };
-  } else if (fetchCategoriesSuccess.match(action)) {
+
+  if (fetchCategoriesSuccess.match(action))
     return {
       ...state,
       isLoading: false,
       categories: action.payload,
     };
-  } else if (fetchCategoriesFailed.match(action)) {
+
+  if (fetchCategoriesFailed.match(action))
     return {
       ...state,
       isLoading: false,
       error: action.payload,
     };
-  } else {
-    return state;
-  }
+
+  return state;
+
   // return this old code instead of new code above and see if there are any changes in VScode tooltip in other components or other files. Because of here is absence of function predicate (narrowing the types), actions here have ANY type
   // switch (action.type) {
   //   case CATEGORIES_ACTION_TYPES.FETCH_CATEGORIES_START:

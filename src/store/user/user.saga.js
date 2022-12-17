@@ -2,7 +2,7 @@ import { all, call, takeLatest, put } from "redux-saga/effects";
 
 import { USER_ACTION_TYPES } from "./user.types";
 
-import { signInSuccess, signInFailed } from "./user.action";
+import { signInSuccess, signFailed } from "./user.action";
 
 import {
   getCurrentUser,
@@ -27,7 +27,7 @@ export function* getSnapshotFromUserAuth(userAuth, additionalInfo) {
       })
     );
   } catch (error) {
-    yield put(signInFailed(error));
+    yield put(signFailed(error));
   }
 }
 
@@ -37,7 +37,7 @@ export function* isUserAuthenticated() {
     if (!userAuth) return;
     yield call(getSnapshotFromUserAuth, userAuth);
   } catch (error) {
-    yield put(signInFailed(error));
+    yield put(signFailed(error));
   }
 }
 
@@ -46,7 +46,7 @@ export function* signInWithGoogle() {
     const response = yield call(signInWithGooglePopup);
     yield call(getSnapshotFromUserAuth, response.user);
   } catch (error) {
-    yield put(signInFailed(error));
+    yield put(signFailed(error));
   }
 }
 
@@ -60,7 +60,7 @@ export function* signInWithEmailAndPassword({ payload }) {
     );
     yield call(getSnapshotFromUserAuth, response.user);
   } catch (error) {
-    yield put(signInFailed(error));
+    yield put(signFailed(error));
     if (error.code === "auth/user-not-found") {
       alert("email not found");
     } else if (error.code === "auth/wrong-password") {
@@ -82,7 +82,7 @@ export function* signUpWithEmailAndPassword({ payload }) {
     );
     yield call(getSnapshotFromUserAuth, user, additionalInfo);
   } catch (error) {
-    yield put(signInFailed(error));
+    yield put(signFailed(error));
     if (error.code === "auth/email-already-in-use") {
       alert("email already in use");
     } else if (error.code === "auth/weak-password") {
@@ -98,7 +98,7 @@ export function* signOutAuth() {
     yield call(signOutUser);
     yield call(isUserAuthenticated);
   } catch (error) {
-    yield put(signInFailed(error));
+    yield put(signFailed(error));
   }
 }
 

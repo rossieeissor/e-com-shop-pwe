@@ -27,7 +27,7 @@ const PaymentConfirmation = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const continueShipping = () => {
+  const continueShopping = () => {
     dispatch(successfulPaymentOff());
     navigate("/");
   };
@@ -46,7 +46,7 @@ const PaymentConfirmation = () => {
 
         <Total>TOTAL: ${paidTotal}</Total>
       </InfoWrap>
-      <ContinueShoppingButton onClick={continueShipping}>
+      <ContinueShoppingButton onClick={continueShopping}>
         Continue Shopping
       </ContinueShoppingButton>
     </PaymentConfirmationContainer>

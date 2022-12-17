@@ -7,6 +7,8 @@ import {
   GoogleAuthProvider,
   signOut,
   onAuthStateChanged,
+  User,
+  NextOrObserver,
 } from "firebase/auth";
 
 import {
@@ -17,9 +19,12 @@ import {
   collection,
   query,
   getDocs,
-  writeBatch,
+  QueryDocumentSnapshot,
+  // writeBatch,
 } from "firebase/firestore";
-import { SHOP_DATA } from "../../shop-data";
+// import { SHOP_DATA } from "../../shop-data";
+
+import { Category } from "../../store/categories/categories.types";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCDfhYmbG_qjMSUn_vHlX09n7RcsUz6Bo8",
@@ -39,14 +44,19 @@ provider.setCustomParameters({
 });
 
 export const auth = getAuth();
-// console.log("this is auth from getAuth", auth);
 
 export const signInWithGooglePopup = () => signInWithPopup(auth, provider);
-export const createNewUserWithEmailAndPassword = async (email, password) => {
+export const createNewUserWithEmailAndPassword = async (
+  email: string,
+  password: string
+) => {
   if (!email || !password) return;
   return await createUserWithEmailAndPassword(auth, email, password);
 };
-export const signInWithUserEmailandPassword = async (email, password) => {
+export const signInWithUserEmailandPassword = async (
+  email: string,
+  password: string
+) => {
   if (!email || !password) return;
   return await signInWithEmailAndPassword(auth, email, password);
 };
@@ -54,9 +64,21 @@ export const signInWithUserEmailandPassword = async (email, password) => {
 export const signOutUser = async () => await signOut(auth);
 
 export const clothingDB = getFirestore();
-// console.log("this is clothingDB", clothingDB);
 
-export const createUserDocumentFromAuth = async (userAuth, additionalInfo) => {
+export type AdditionlInfo = {
+  displayName?: string;
+};
+
+export type UserData = {
+  createdAt: Date;
+  displayName: string;
+  email: string;
+};
+
+export const createUserDocumentFromAuth = async (
+  userAuth: User,
+  additionalInfo = {} as AdditionlInfo
+): Promise<QueryDocumentSnapshot<UserData> | void> => {
   if (!userAuth) return;
   const userDocRef = doc(clothingDB, "users", userAuth.uid);
   let userSnapshot = await getDoc(userDocRef);
@@ -76,29 +98,23 @@ export const createUserDocumentFromAuth = async (userAuth, additionalInfo) => {
       console.log("error creating user", err);
     }
   }
-  return userSnapshot;
+  return userSnapshot as QueryDocumentSnapshot<UserData>;
 };
 
-export const fetchHatsFromDataBase = async () => {
-  const docRef = doc(clothingDB, "categories", "hats");
-  const docSnap = await getDoc(docRef);
-  const hats = docSnap.data().items;
-
-  return hats;
-};
-
-export const getCategoriesAndDocuments = async collectionString => {
+export const getCategoriesAndDocuments = async (
+  collectionString: string
+): Promise<Category[]> => {
   const collectionRef = collection(clothingDB, collectionString);
   const q = query(collectionRef);
 
   const querySnapshot = await getDocs(q);
-  return querySnapshot.docs.map(docSnapshot => docSnapshot.data());
+  return querySnapshot.docs.map(docSnapshot => docSnapshot.data() as Category);
 };
 
-export const onAuthStateChangedListener = callback =>
+export const onAuthStateChangedListener = (callback: NextOrObserver<User>) =>
   onAuthStateChanged(auth, callback);
 
-export const getCurrentUser = () => {
+export const getCurrentUser = (): Promise<User | null> => {
   return new Promise((resolve, reject) => {
     const unsubscribe = onAuthStateChanged(
       auth,

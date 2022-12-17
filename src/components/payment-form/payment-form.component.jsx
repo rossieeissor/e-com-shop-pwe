@@ -56,6 +56,7 @@ const PaymentForm = () => {
       const {
         paymentIntent: { client_secret, created },
       } = response;
+      console.log(typeof created);
 
       const paymentResult = await stripe.confirmCardPayment(client_secret, {
         payment_method: {
@@ -89,14 +90,13 @@ const PaymentForm = () => {
       <FormContainer onSubmit={paymentHandler}>
         <h2>Credit Card Payment: </h2>
         <Hint>
-          You are in test mode. Use 4242 4242 4242 4242 number to pay.
+          You are in test mode. Use 4242 4242 4242 4242 card number to pay.
         </Hint>
         <PaymentWrapper>
           <CardElement />
           <PaymentButton
             isLoading={isProcessingPayment}
-            buttonType={BUTTON_TYPE_CLASSES.inverted}
-          >
+            buttonType={BUTTON_TYPE_CLASSES.inverted}>
             Pay Now
           </PaymentButton>
         </PaymentWrapper>
