@@ -18,7 +18,7 @@ type GoogleSignInStart = Action<USER_ACTION_TYPES.GOOGLE_SIGN_IN_START>;
 export const googleSignInStart = (): GoogleSignInStart =>
   createAction(USER_ACTION_TYPES.GOOGLE_SIGN_IN_START);
 
-type EmailSignInStart = ActionWithPayload<
+export type EmailSignInStart = ActionWithPayload<
   USER_ACTION_TYPES.EMAIL_SIGN_IN_START,
   EmailAndPassword
 >;
@@ -31,7 +31,7 @@ export const emailSignInStart = (
 
 export type EmailSignUpStart = ActionWithPayload<
   USER_ACTION_TYPES.EMAIL_SIGN_UP_START,
-  EmailAndPassword & AdditionlInfo
+  EmailAndPassword & { additionalInfo: AdditionlInfo }
 >;
 
 export const emailSignUpStart = (
@@ -51,7 +51,7 @@ export type SignInSuccess = ActionWithPayload<
 >;
 
 export const signInSuccess = withMatcher(
-  (user: UserData): SignInSuccess =>
+  (user: UserData & { id: string }): SignInSuccess =>
     createAction(USER_ACTION_TYPES.SIGN_IN_SUCCESS, user)
 );
 

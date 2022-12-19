@@ -6,7 +6,13 @@ import {
   Body,
 } from "./directory-item.styles";
 
-const DirectoryItem = ({ category }) => {
+type DirectoryItemProps = {
+  category: {
+    imageUrl: string;
+    title: string}
+}
+
+const DirectoryItem = ({ category }: DirectoryItemProps) => {
   const { imageUrl, title } = category;
 
   const navigate = useNavigate();
