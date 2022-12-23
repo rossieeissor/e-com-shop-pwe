@@ -1,8 +1,10 @@
 import { CartItem } from "../cart/cart.types";
 
 export enum PAYMENT_ACTION_TYPES {
-  SUCCESSFUL_PAYMENT_ON = "payment/SUCCESSFUL_PAYMENT_ON",
-  SUCCESSFUL_PAYMENT_OFF = "payment/SUCCESSFUL_PAYMENT_OFF",
+  PAYMENT_START = "payment/PAYMENT_START",
+  PAYMENT_SUCCESSFUL = "payment/PAYMENT_SUCCESSFUL",
+  PAYMENT_FAILED = "payment/PAYMENT_FAILED",
+  PAYMENT_RESET = "payment/PAYMENT_RESET",
 }
 
 export type PaymentDetails = {

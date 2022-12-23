@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import CartItem from "../cart-item/cart-item.component";
 
-import { successfulPaymentOff } from "../../store/payment/payment.action";
+import { paymentReset } from "../../store/payment/payment.action";
 
 import {
   selectPaidProducts,
@@ -28,7 +28,7 @@ const PaymentConfirmation = () => {
   const navigate = useNavigate();
 
   const continueShopping = () => {
-    dispatch(successfulPaymentOff());
+    dispatch(paymentReset());
     navigate("/");
   };
 

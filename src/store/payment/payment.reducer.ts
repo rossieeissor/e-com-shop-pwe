@@ -1,5 +1,9 @@
 import { AnyAction } from "redux";
-import { successfulPaymentOn, successfulPaymentOff } from "./payment.action";
+import {
+  paymentReset,
+  paymentSuccessful,
+  paymentFailed,
+} from "./payment.action";
 import { CartItem } from "../cart/cart.types";
 
 export type PaymentState = {
@@ -7,6 +11,7 @@ export type PaymentState = {
   readonly paymentNumber: number | string;
   readonly paidProducts: CartItem[];
   readonly paidTotal: number;
+  error: Error | null;
 };
 
 const PAYMENT_INITIAL_STATE: PaymentState = {
@@ -14,13 +19,14 @@ const PAYMENT_INITIAL_STATE: PaymentState = {
   paymentNumber: "",
   paidProducts: [],
   paidTotal: 0,
+  error: null,
 };
 
 export const paymentReducer = (
   state = PAYMENT_INITIAL_STATE,
   action: AnyAction
 ) => {
-  if (successfulPaymentOn.match(action)) {
+  if (paymentSuccessful.match(action)) {
     return {
       ...state,
       isPaymentSuccessful: true,
@@ -28,7 +34,14 @@ export const paymentReducer = (
     };
   }
 
-  if (successfulPaymentOff.match(action)) {
+  if (paymentFailed.match(action)) {
+    return {
+      ...state,
+      error: action.payload,
+    };
+  }
+
+  if (paymentReset.match(action)) {
     return {
       ...state,
       ...PAYMENT_INITIAL_STATE,
