@@ -1,4 +1,4 @@
-import { useState, FormEvent } from "react";
+import { FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import {
@@ -6,7 +6,7 @@ import {
   selectCartTotal,
 } from "../../store/cart/cart.selector";
 import { selectCurrentUser } from "../../store/user/user.selector";
-
+import { selectIsProcessingPayment } from "../../store/payment/payment.selector";
 import { paymentStart } from "../../store/payment/payment.action";
 
 import { BUTTON_TYPE_CLASSES } from "../button/button.componnet";
@@ -18,13 +18,14 @@ import {
   Hint,
   PaymentWrapper,
 } from "./payment-form.styles";
+
 const PaymentForm = () => {
   const stripe = useStripe();
   const elements = useElements();
   const amount = useSelector(selectCartTotal);
   const cartItems = useSelector(selectCartItems);
   const currentUser = useSelector(selectCurrentUser);
-  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
+  const isProcessingPayment = useSelector(selectIsProcessingPayment)
   const dispatch = useDispatch();
   const dataForPayment = {
     stripe: stripe,
@@ -39,10 +40,7 @@ const PaymentForm = () => {
 
   const paymentHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // setIsProcessingPayment(true);
-   
     dispatch(paymentStart(dataForPayment))
-    // setIsProcessingPayment(false);
   }
     
   return (

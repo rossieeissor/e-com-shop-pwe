@@ -24,3 +24,8 @@ export const selectPaidTotal = createSelector(
   [paymentReducer],
   paymentSlice => paymentSlice.paidTotal
 );
+
+export const selectIsProcessingPayment = createSelector(
+  [paymentReducer],
+  paymentSlice => paymentSlice.isProcessingPayment
+);

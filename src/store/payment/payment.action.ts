@@ -1,4 +1,4 @@
-import { Stripe, StripeElements } from "@stripe/stripe-js";
+import { Stripe, StripeElements, StripeError } from "@stripe/stripe-js";
 import { createAction } from "../../utils/reducer/reducer.utils";
 import { PAYMENT_ACTION_TYPES, PaymentDetails } from "./payment.types";
 import { CartItem } from "../cart/cart.types";
@@ -26,8 +26,10 @@ export type PaymentStart = ActionWithPayload<
   DataForPayment
 >;
 
-export const paymentStart = (dataForPayment: DataForPayment): PaymentStart =>
-  createAction(PAYMENT_ACTION_TYPES.PAYMENT_START, dataForPayment);
+export const paymentStart = withMatcher(
+  (dataForPayment: DataForPayment): PaymentStart =>
+    createAction(PAYMENT_ACTION_TYPES.PAYMENT_START, dataForPayment)
+);
 
 export type PaymentSuccessful = ActionWithPayload<
   PAYMENT_ACTION_TYPES.PAYMENT_SUCCESSFUL,
@@ -44,7 +46,7 @@ export type PaymentFailed = ActionWithPayload<
   Error
 >;
 
-export const paymentFailed = withMatcher((error: Error) =>
+export const paymentFailed = withMatcher((error: Error | StripeError) =>
   createAction(PAYMENT_ACTION_TYPES.PAYMENT_FAILED, error)
 );
 

@@ -12,7 +12,7 @@ const categories = [
   },
   {
     id: 2,
-    title: "keyboars",
+    title: "keyboards",
     imageUrl: "https://i.postimg.cc/T3sqvJ1c/keyboards1.jpg",
   },
   {

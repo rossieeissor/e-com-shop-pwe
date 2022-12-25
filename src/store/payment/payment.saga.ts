@@ -45,6 +45,7 @@ export function* startPayment({ payload }: PaymentStart) {
 
     if (paymentResult.error) {
       alert(paymentResult.error.message);
+      yield* put(paymentFailed(paymentResult.error));
     } else {
       if (paymentResult.paymentIntent.status === "succeeded") {
         yield* put(clearCart());

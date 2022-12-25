@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { setIsCartOpen } from "../../store/cart/cart.action";
@@ -12,7 +13,7 @@ import CartItem from "../cart-item/cart-item.component";
 
 import {
   CartDropdownContainer,
-  // EmptyMessage,
+  EmptyMessage,
   CartItems,
 } from "./cart-dropdown.styles";
 
@@ -25,18 +26,21 @@ const CartDropdown = () => {
   };
   const navigate = useNavigate();
 
-  const goToCheckoutHandler = () => {
+  const goToCheckoutHandler = useCallback(() => {
     toggleIsCartOpen();
     navigate("/checkout");
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []) 
 
   return (
     <CartDropdownContainer>
-      <CartItems>
+      {cartItems.length ? <CartItems>
         {cartItems.map(item => (
           <CartItem cartItem={item} key={item.id} />
-        ))}
-      </CartItems>
+        ))} 
+      </CartItems> : <EmptyMessage>Your cart is epmty</EmptyMessage>  }
+      
+      
       <Button onClick={goToCheckoutHandler}>Go to Checkout</Button>
     </CartDropdownContainer>
   );

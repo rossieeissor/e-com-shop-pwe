@@ -29,7 +29,6 @@ const Navigation = () => {
     <>
       <NavigationContainer>
         <Logo to="/" />
-        <span> SALE! WoW 60 time cards. k4g.com</span>
         {currentUser && (
           <DisplayName>Hello, {currentUser.displayName}! </DisplayName>
         )}

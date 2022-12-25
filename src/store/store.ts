@@ -1,5 +1,6 @@
-import { compose, createStore, applyMiddleware, Middleware } from "redux";
+import { compose, createStore, applyMiddleware } from "redux";
 import { persistStore, persistReducer, PersistConfig } from "redux-persist";
+import { getPersistConfig } from "redux-deep-persist";
 import storage from "redux-persist/lib/storage";
 // import logger from "redux-logger";
 // import thunk from "redux-thunk";
@@ -21,11 +22,12 @@ declare global {
   }
 }
 
-const persistConfig: ExtendedPersistConfig = {
+const persistConfig = getPersistConfig({
   key: "root",
   storage,
-  blacklist: ["user"],
-};
+  blacklist: ["user", "payment.isProcessingPayment"],
+  rootReducer,
+});
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
