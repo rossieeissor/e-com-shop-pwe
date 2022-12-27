@@ -8,6 +8,11 @@ export const NavigationContainer = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: 25px;
+  @media screen and (max-width: 800px) {
+    height: 60px;
+    padding: 10px;
+    margin-bottom: 20px;
+    }
 `;
 
 export const Logo = styled(Link)`
@@ -17,8 +22,11 @@ export const Logo = styled(Link)`
   height: 100%;
   width: 70px;
   background: url(${crwnLogo});
-  background-size: auto;
-  background-size: 70px 100%;
+  background-size: 100% 100%;
+
+  @media screen and (max-width: 800px) {
+    width: 40px;
+  }
 `;
 
 export const NavLinks = styled.div`
@@ -37,5 +45,11 @@ export const Navlink = styled(Link)`
 export const DisplayName = styled.div`
   display: flex;
   align-items: center;
+  text-align: center;
   font-size: 18px;
+  padding: 10px 0 10px 10px;
+  
+  @media screen and (max-width: 800px) {
+    
+  }
 `;

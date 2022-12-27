@@ -39,6 +39,7 @@ export const Body = styled.div`
 `;
 
 export const DeirectoryItemContainer = styled.div`
+  position: relative;
   min-width: 30%;
   height: 240px;
   flex: 1 1 auto;

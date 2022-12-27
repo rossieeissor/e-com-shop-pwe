@@ -7,7 +7,6 @@ export const BaseButton = styled.button`
   width: auto;
   height: 50px;
   letter-spacing: 0.5px;
-  line-height: 50px;
   font-size: 15px;
   background-color: black;
   color: white;
@@ -24,6 +23,10 @@ export const BaseButton = styled.button`
     background-color: white;
     color: black;
     border: 1px solid black;
+  }
+
+  @media screen and (max-width: 800px) {
+    min-width: unset;
   }
 `;
 

@@ -1,6 +1,6 @@
 import { FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
+import { CardElement, useStripe, useElements, PaymentElement } from "@stripe/react-stripe-js";
 import {
   selectCartItems,
   selectCartTotal,

@@ -10,9 +10,9 @@ import { addItemToCart } from "../../store/cart/cart.action";
 
 import {
   ProductCardContainer,
+  ImageContainer,
   Footer,
   Name,
-  Price,
 } from "./product-card.styles";
 
 type ProductCardProps = {
@@ -29,10 +29,12 @@ const ProductCard = ({ product }: ProductCardProps) => {
 
   return (
     <ProductCardContainer>
-      <img src={imageUrl} alt={`${name}`} />
+      <ImageContainer>
+        <img src={imageUrl} alt={`${name}`} />
+      </ImageContainer>
       <Footer>
         <Name>{name}</Name>
-        <Price>{price}</Price>
+        <span>${price}</span>
       </Footer>
       <Button
         buttonType={BUTTON_TYPE_CLASSES.inverted}

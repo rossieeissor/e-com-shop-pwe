@@ -3,7 +3,7 @@ import styled from "styled-components/macro";
 export const CheckoutItemContainer = styled.div`
   width: 100%;
   display: flex;
-  height: 100px;
+  min-height: 100px;
   border-bottom: 1px solid darkgrey;
   padding: 15px 0;
   font-size: 20px;
@@ -13,12 +13,12 @@ export const CheckoutItemContainer = styled.div`
 export const Image = styled.div`
   width: 23%;
   padding-right: 15px;
-  height: 100%;
+  height: 70px;
   display: flex;
-  justify-content: center;
 
   img {
-    height: 100%;
+    width: 100%;
+    object-fit: contain;
   }
 `;
 
