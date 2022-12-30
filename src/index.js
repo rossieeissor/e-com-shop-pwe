@@ -6,6 +6,7 @@ import { PersistGate } from "redux-persist/integration/react";
 import { Elements } from "@stripe/react-stripe-js";
 
 import { store, persistor } from "./store/store";
+import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import { stripePromise } from "./utils/stripe/stripe.utils";
 
 import "./index.css";
@@ -31,3 +32,4 @@ root.render(
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
+serviceWorkerRegistration.register();

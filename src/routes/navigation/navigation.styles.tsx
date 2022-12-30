@@ -1,6 +1,6 @@
 import styled from "styled-components/macro";
 import { Link } from "react-router-dom";
-import crwnLogo from "../../assets/Logo.jpg";
+import crwnLogo from "../../assets/Logo.png";
 
 export const NavigationContainer = styled.div`
   height: 70px;
