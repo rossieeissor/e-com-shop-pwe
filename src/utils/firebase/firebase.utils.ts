@@ -16,6 +16,7 @@ import {
   doc,
   getDoc,
   setDoc,
+  updateDoc,
   collection,
   query,
   getDocs,
@@ -25,6 +26,7 @@ import {
 // import { SHOP_DATA } from "../../shop-data";
 
 import { Category } from "../../store/categories/categories.types";
+import { CartItem } from "../../store/cart/cart.types";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCDfhYmbG_qjMSUn_vHlX09n7RcsUz6Bo8",
@@ -70,7 +72,7 @@ export type AdditionlInfo = {
 };
 
 export type UserData = {
-  createdAt: Date;
+  createdAt: string;
   displayName: string;
   email: string;
 };
@@ -86,12 +88,14 @@ export const createUserDocumentFromAuth = async (
   if (!userSnapshot.exists()) {
     try {
       const { displayName, email } = userAuth;
-      const createdAt = new Date();
+      const date = new Date();
+      const createdAt = JSON.stringify(date.toJSON());
       await setDoc(userDocRef, {
         displayName,
         email,
         createdAt,
         ...additionalInfo,
+        cart: [],
       });
       userSnapshot = await getDoc(userDocRef);
     } catch (err) {
@@ -108,7 +112,10 @@ export const getCategoriesAndDocuments = async (
   const q = query(collectionRef);
 
   const querySnapshot = await getDocs(q);
-  return querySnapshot.docs.map(docSnapshot => docSnapshot.data() as Category);
+  const categoriesArray = querySnapshot.docs.map(
+    docSnapshot => docSnapshot.data() as Category
+  );
+  return categoriesArray;
 };
 
 export const onAuthStateChangedListener = (callback: NextOrObserver<User>) =>
@@ -127,6 +134,21 @@ export const getCurrentUser = (): Promise<User | null> => {
   });
 };
 
+export const addCartItemsToFirestore = async (
+  cartItems: CartItem[],
+  userAuth: User
+) => {
+  const cartDocRef = doc(clothingDB, "users", userAuth.uid);
+  await updateDoc(cartDocRef, { cart: cartItems });
+};
+
+export const getCartItemsFromFirestore = async (userAuth: User) => {
+  const cartDocRef = doc(clothingDB, "users", userAuth.uid);
+  const cartSnapshot = await getDoc(cartDocRef);
+  const cartItems = cartSnapshot.get("cart");
+  return cartItems;
+};
+
 // const addCollectionAndDocuments = async (collectionKey, objectToAdd) => {
 //   const collectionRef = collection(clothingDB, collectionKey);
 //   const batch = writeBatch(clothingDB);
@@ -138,4 +160,4 @@ export const getCurrentUser = (): Promise<User | null> => {
 //   await batch.commit();
 //   console.log("done");
 // };
-// addCollectionAndDocuments("categories", SHOP_DATA);
+// // addCollectionAndDocuments("categories", SHOP_DATA);

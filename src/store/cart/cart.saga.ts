@@ -5,9 +5,9 @@ import {
   AddItemToCart,
   RmoveItemFromCart,
   ClearItemFromCart,
-  setCartItems,
   clearItemFromCart,
 } from "./cart.action";
+import { setCartItems } from "./cart.reducer";
 
 import { RootState } from "../store";
 

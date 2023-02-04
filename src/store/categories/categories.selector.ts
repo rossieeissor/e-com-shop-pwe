@@ -1,4 +1,4 @@
-import { createSelector } from "reselect";
+import { createSelector } from "@reduxjs/toolkit";
 
 import { CategoriesState } from "./categories.reducer";
 import { CategoryMap } from "./categories.types";

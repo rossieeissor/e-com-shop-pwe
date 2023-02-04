@@ -1,4 +1,4 @@
-import { createSelector } from "reselect";
+import { createSelector } from "@reduxjs/toolkit";
 
 import { CartState } from "./cart.reducer";
 import { RootState } from "../store";

@@ -1,39 +1,39 @@
-import { AnyAction } from "redux";
-import { signInSuccess, signFailed, signOutstart } from "./user.action";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { UserData } from "../../utils/firebase/firebase.utils";
 
 export type UserState = {
   readonly currentUser: UserData | null;
   readonly isLoading: boolean;
-  readonly error: Error | null;
+  readonly error: string | null;
 };
 
-const INITIAL_STATE: UserState = {
+const initialState: UserState = {
   currentUser: null,
   isLoading: false,
   error: null,
 };
 
-export const userReducer = (state = INITIAL_STATE, action: AnyAction) => {
-  if (signInSuccess.match(action))
-    return {
-      ...state,
-      currentUser: action.payload,
-      isLoading: false,
-    };
+const userSlice = createSlice({
+  name: "user",
+  initialState,
+  reducers: {
+    signInSuccess(state, action: PayloadAction<UserData & { id: string }>) {
+      state.currentUser = action.payload;
+      state.isLoading = false;
+    },
 
-  if (signFailed.match(action))
-    return {
-      ...state,
-      error: action.payload,
-      isLoading: false,
-    };
+    signFailed(state, action: PayloadAction<string>) {
+      state.error = action.payload;
+      state.isLoading = false;
+    },
 
-  if (signOutstart.match(action))
-    return {
-      ...state,
-      currentUser: null,
-      isLoading: false,
-    };
-  return state;
-};
+    signOutstart(state) {
+      state.currentUser = null;
+      state.isLoading = false;
+    },
+  },
+});
+
+export const { signInSuccess, signFailed, signOutstart } = userSlice.actions;
+
+export default userSlice.reducer;

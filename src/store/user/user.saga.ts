@@ -5,12 +5,8 @@ import { USER_ACTION_TYPES } from "./user.types";
 import { User } from "@firebase/auth";
 import { AdditionlInfo } from "../../utils/firebase/firebase.utils";
 
-import {
-  signInSuccess,
-  signFailed,
-  EmailSignInStart,
-  EmailSignUpStart,
-} from "./user.action";
+import { EmailSignInStart, EmailSignUpStart } from "./user.action";
+import { signInSuccess, signFailed, signOutstart } from "./user.reducer";
 
 import {
   getCurrentUser,
@@ -41,7 +37,8 @@ export function* getSnapshotFromUserAuth(
       );
     }
   } catch (error) {
-    yield* put(signFailed(error as Error));
+    const errorMessage = (error as Error).message;
+    yield* put(signFailed(errorMessage));
   }
 }
 
@@ -51,7 +48,8 @@ export function* isUserAuthenticated() {
     if (!userAuth) return;
     yield* call(getSnapshotFromUserAuth, userAuth);
   } catch (error) {
-    yield* put(signFailed(error as Error));
+    const errorMessage = (error as Error).message;
+    yield* put(signFailed(errorMessage));
   }
 }
 
@@ -60,7 +58,8 @@ export function* signInWithGoogle() {
     const response = yield* call(signInWithGooglePopup);
     yield* call(getSnapshotFromUserAuth, response.user);
   } catch (error) {
-    yield* put(signFailed(error as Error));
+    const errorMessage = (error as Error).message;
+    yield* put(signFailed(errorMessage));
   }
 }
 
@@ -74,7 +73,8 @@ export function* signInWithEmailAndPassword({ payload }: EmailSignInStart) {
     );
     if (response) yield* call(getSnapshotFromUserAuth, response.user);
   } catch (error) {
-    yield* put(signFailed(error as Error));
+    const errorMessage = (error as Error).message;
+    yield* put(signFailed(errorMessage));
     if ((error as AuthError).code === AuthErrorCodes.USER_DELETED) {
       alert("email not found");
     } else if ((error as AuthError).code === AuthErrorCodes.INVALID_PASSWORD) {
@@ -98,7 +98,8 @@ export function* signUpWithEmailAndPassword({ payload }: EmailSignUpStart) {
       yield* call(getSnapshotFromUserAuth, response.user, additionalInfo);
     }
   } catch (error) {
-    yield* put(signFailed(error as Error));
+    const errorMessage = (error as Error).message;
+    yield* put(signFailed(errorMessage));
 
     if ((error as AuthError).code === AuthErrorCodes.EMAIL_EXISTS) {
       alert("email already in use");
@@ -115,12 +116,13 @@ export function* signOutAuth() {
     yield* call(signOutUser);
     yield* call(isUserAuthenticated);
   } catch (error) {
-    yield* put(signFailed(error as Error));
+    const errorMessage = (error as Error).message;
+    yield* put(signFailed(errorMessage));
   }
 }
 
 export function* onSignOut() {
-  yield* takeLatest(USER_ACTION_TYPES.SIGN_OUT, signOutAuth);
+  yield* takeLatest(signOutstart.type, signOutAuth);
 }
 
 export function* onSignUpWithEmailAndPassword() {

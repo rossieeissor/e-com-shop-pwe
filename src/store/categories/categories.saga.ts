@@ -5,9 +5,9 @@ import { getCategoriesAndDocuments } from "../../utils/firebase/firebase.utils";
 import {
   fetchCategoriesSuccess,
   fetchCategoriesFailed,
-} from "./categories.action";
+} from "./categories.reducer";
 
-import { CATEGORIES_ACTION_TYPES } from "./categories.types";
+import { fetchCategoriesStart } from "./categories.reducer";
 
 export function* fetchCategoriesAsync() {
   try {
@@ -22,10 +22,7 @@ export function* fetchCategoriesAsync() {
 }
 
 export function* onFetchCategories() {
-  yield* takeLatest(
-    CATEGORIES_ACTION_TYPES.FETCH_CATEGORIES_START,
-    fetchCategoriesAsync
-  );
+  yield* takeLatest(fetchCategoriesStart.type, fetchCategoriesAsync);
 }
 
 export function* categoriesSaga() {

@@ -1,15 +1,17 @@
 import { all, call, takeLatest, put } from "typed-redux-saga/macro";
 
+import { PayloadAction } from "@reduxjs/toolkit";
 import { CardElement } from "@stripe/react-stripe-js";
 import { StripeCardElement } from "@stripe/stripe-js";
 
-import { PAYMENT_ACTION_TYPES } from "./payment.types";
+import { DataForPayment } from "./payment.types";
+
 import {
+  paymentStart,
   paymentFailed,
-  PaymentStart,
   paymentSuccessful,
-} from "./payment.action";
-import { clearCart } from "../cart/cart.action";
+} from "./payment.reducer";
+import { clearCart } from "../cart/cart.reducer";
 
 import { stripeFetch, paymentConfirm } from "../../utils/stripe/stripe.utils";
 
@@ -20,7 +22,7 @@ const ifValidClientSecret = (
   clientSecret: string | null
 ): clientSecret is string => clientSecret !== null;
 
-export function* startPayment({ payload }: PaymentStart) {
+export function* startPayment({ payload }: PayloadAction<DataForPayment>) {
   const { stripe, elements, amount, currentUser, paymentDetails } = payload;
   if (!stripe || !elements || !amount) return;
   try {
@@ -60,7 +62,7 @@ export function* startPayment({ payload }: PaymentStart) {
 }
 
 export function* onPaymentStart() {
-  yield* takeLatest(PAYMENT_ACTION_TYPES.PAYMENT_START, startPayment);
+  yield* takeLatest(paymentStart.type, startPayment);
 }
 
 export function* paymentSaga() {

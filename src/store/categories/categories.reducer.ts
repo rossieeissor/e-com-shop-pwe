@@ -1,10 +1,5 @@
-import { AnyAction } from "redux";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Category } from "./categories.types";
-import {
-  fetchCategoriesStart,
-  fetchCategoriesSuccess,
-  fetchCategoriesFailed,
-} from "./categories.action";
 
 export type CategoriesState = {
   readonly categories: Category[];
@@ -18,52 +13,30 @@ export const CATEGORIES_INITIAL_STATE: CategoriesState = {
   error: null,
 };
 
-export const categoriesReducer = (
-  state = CATEGORIES_INITIAL_STATE,
-  action: AnyAction
-): CategoriesState => {
-  if (fetchCategoriesStart.match(action))
-    return {
-      ...state,
-      isLoading: true,
-    };
+const categoriesSlice = createSlice({
+  name: "categories",
+  initialState: CATEGORIES_INITIAL_STATE,
+  reducers: {
+    fetchCategoriesStart(state) {
+      state.isLoading = true;
+    },
 
-  if (fetchCategoriesSuccess.match(action))
-    return {
-      ...state,
-      isLoading: false,
-      categories: action.payload,
-    };
+    fetchCategoriesSuccess(state, action: PayloadAction<Category[]>) {
+      state.isLoading = false;
+      state.categories = action.payload;
+    },
 
-  if (fetchCategoriesFailed.match(action))
-    return {
-      ...state,
-      isLoading: false,
-      error: action.payload,
-    };
+    fetchCategoriesFailed(state, action: PayloadAction<Error>) {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
+  },
+});
 
-  return state;
+export const {
+  fetchCategoriesStart,
+  fetchCategoriesSuccess,
+  fetchCategoriesFailed,
+} = categoriesSlice.actions;
 
-  // return this old code instead of new code above and see if there are any changes in VScode tooltip in other components or other files. Because of here is absence of function predicate (narrowing the types), actions here have ANY type
-  // switch (action.type) {
-  //   case CATEGORIES_ACTION_TYPES.FETCH_CATEGORIES_START:
-  //     return {
-  //       ...state,
-  //       isLoading: true,
-  //     };
-  //   case CATEGORIES_ACTION_TYPES.FETCH_CATEGORIES_SUCCESS:
-  //     return {
-  //       ...state,
-  //       isLoading: false,
-  //       categories: action.payload,
-  //     };
-  //   case CATEGORIES_ACTION_TYPES.FETCH_CATEGORIES_FAILED:
-  //     return {
-  //       ...state,
-  //       isLoading: false,
-  //       error: action.payload,
-  //     };
-  //     default:
-  //       return state
-  // // }
-};
+export default categoriesSlice.reducer;

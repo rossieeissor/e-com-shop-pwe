@@ -1,13 +1,13 @@
 import { FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { CardElement, useStripe, useElements, PaymentElement } from "@stripe/react-stripe-js";
+import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import {
   selectCartItems,
   selectCartTotal,
 } from "../../store/cart/cart.selector";
 import { selectCurrentUser } from "../../store/user/user.selector";
 import { selectIsProcessingPayment } from "../../store/payment/payment.selector";
-import { paymentStart } from "../../store/payment/payment.action";
+import { paymentStart } from "../../store/payment/payment.reducer";
 
 import { BUTTON_TYPE_CLASSES } from "../button/button.componnet";
 

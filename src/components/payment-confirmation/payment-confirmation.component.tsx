@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import CartItem from "../cart-item/cart-item.component";
 
-import { paymentReset } from "../../store/payment/payment.action";
+import { paymentReset } from "../../store/payment/payment.reducer";
 
 import {
   selectPaidProducts,

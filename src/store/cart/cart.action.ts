@@ -8,26 +8,6 @@ import {
   withMatcher,
 } from "../../utils/reducer/reducer.utils";
 
-type SetIsCartOpen = ActionWithPayload<
-  CART_ACTION_TYPES.TOGGLE_CART_IS_OPEN,
-  boolean
->;
-
-export const setIsCartOpen = withMatcher(
-  (boolean: boolean): SetIsCartOpen =>
-    createAction(CART_ACTION_TYPES.TOGGLE_CART_IS_OPEN, boolean)
-);
-
-export type SetCartItems = ActionWithPayload<
-  CART_ACTION_TYPES.SET_CART_ITEMS,
-  CartItem[]
->;
-
-export const setCartItems = withMatcher(
-  (cartItems: CartItem[]): SetCartItems =>
-    createAction(CART_ACTION_TYPES.SET_CART_ITEMS, cartItems)
-);
-
 export type AddItemToCart = ActionWithPayload<
   CART_ACTION_TYPES.ADD_CART_ITEM,
   CategoryItem
@@ -56,7 +36,7 @@ export const clearItemFromCart = (
 ): ClearItemFromCart =>
   createAction(CART_ACTION_TYPES.CLEAR_CART_ITEM, productToClear);
 
-export type ClearCart = ActionWithPayload<CART_ACTION_TYPES.SET_CART_ITEMS, []>;
+// export type ClearCart = ActionWithPayload<CART_ACTION_TYPES.SET_CART_ITEMS, []>;
 
-export const clearCart = (): ClearCart =>
-  createAction(CART_ACTION_TYPES.SET_CART_ITEMS, []);
+// export const clearCart = (): ClearCart =>
+//   createAction(CART_ACTION_TYPES.SET_CART_ITEMS, []);
