@@ -75,6 +75,7 @@ export type UserData = {
   createdAt: string;
   displayName: string;
   email: string;
+  id: string;
 };
 
 export const createUserDocumentFromAuth = async (
@@ -136,14 +137,16 @@ export const getCurrentUser = (): Promise<User | null> => {
 
 export const addCartItemsToFirestore = async (
   cartItems: CartItem[],
-  userAuth: User
+  currentUserId: string
 ) => {
-  const cartDocRef = doc(clothingDB, "users", userAuth.uid);
+  const cartDocRef = doc(clothingDB, "users", currentUserId);
   await updateDoc(cartDocRef, { cart: cartItems });
 };
 
-export const getCartItemsFromFirestore = async (userAuth: User) => {
-  const cartDocRef = doc(clothingDB, "users", userAuth.uid);
+export const getCartItemsFromFirestore = async (
+  currentUserId: string
+): Promise<CartItem[]> => {
+  const cartDocRef = doc(clothingDB, "users", currentUserId);
   const cartSnapshot = await getDoc(cartDocRef);
   const cartItems = cartSnapshot.get("cart");
   return cartItems;

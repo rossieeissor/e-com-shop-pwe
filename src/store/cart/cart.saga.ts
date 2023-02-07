@@ -1,6 +1,6 @@
 import { takeLatest, put, call, all, select } from "typed-redux-saga/macro";
 
-import { CART_ACTION_TYPES } from "./cart.types";
+import { CartItem, CART_ACTION_TYPES } from "./cart.types";
 import {
   AddItemToCart,
   RmoveItemFromCart,
@@ -11,38 +11,74 @@ import { setCartItems } from "./cart.reducer";
 
 import { RootState } from "../store";
 
+import {
+  addCartItemsToFirestore,
+  getCartItemsFromFirestore,
+  UserData,
+} from "../../utils/firebase/firebase.utils";
+
 const selectCartItems = (state: RootState) => state.cart.cartItems;
+const selectCurrentUser = (state: RootState) => state.user.currentUser;
+
+const fetchCartToFirestore = async (
+  newCartItems: CartItem[],
+  currentUser: UserData | null
+): Promise<CartItem[]> => {
+  if (!currentUser) {
+    return newCartItems;
+  }
+  await addCartItemsToFirestore(newCartItems, currentUser.id);
+  return await getCartItemsFromFirestore(currentUser.id);
+};
 
 export function* addCartItem({ payload }: AddItemToCart) {
   const productToAdd = payload;
   const cartItems = yield* select(selectCartItems);
+  const currentUser = yield* select(selectCurrentUser);
+  let newCartItems: CartItem[];
   const existingCartItem = cartItems.find(
     cartItem => cartItem.id === productToAdd.id
   );
 
   if (existingCartItem) {
-    const newCartItems = cartItems.map(cartItem =>
+    newCartItems = cartItems.map(cartItem =>
       cartItem.id === productToAdd.id
         ? { ...cartItem, quantity: cartItem.quantity + 1 }
         : cartItem
     );
-    yield* put(setCartItems(newCartItems));
   } else {
-    yield* put(setCartItems([...cartItems, { ...productToAdd, quantity: 1 }]));
+    newCartItems = [...cartItems, { ...productToAdd, quantity: 1 }];
   }
+  try {
+    newCartItems = yield* call(fetchCartToFirestore, newCartItems, currentUser);
+  } catch (error) {
+    console.log(error);
+  }
+
+  yield* put(setCartItems(newCartItems));
 }
 
 export function* removeCartItem({ payload }: RmoveItemFromCart) {
   const productToRemove = payload;
   const cartItems = yield* select(selectCartItems);
+  const currentUser = yield* select(selectCurrentUser);
   if (productToRemove.quantity === 1) {
     yield* put(clearItemFromCart(productToRemove));
   } else {
-    const newCartItems = cartItems.map(cartItem =>
+    let newCartItems = cartItems.map(cartItem =>
       cartItem.id === productToRemove.id
         ? { ...cartItem, quantity: cartItem.quantity - 1 }
         : cartItem
     );
+    try {
+      newCartItems = yield* call(
+        fetchCartToFirestore,
+        newCartItems,
+        currentUser
+      );
+    } catch (error) {
+      console.log(error);
+    }
     yield* put(setCartItems(newCartItems));
   }
 }
@@ -50,9 +86,15 @@ export function* removeCartItem({ payload }: RmoveItemFromCart) {
 export function* clearCartItem({ payload }: ClearItemFromCart) {
   const productToRemove = payload;
   const cartItems = yield* select(selectCartItems);
-  const newCartItems = cartItems.filter(
+  const currentUser = yield* select(selectCurrentUser);
+  let newCartItems = cartItems.filter(
     cartItem => cartItem.id !== productToRemove.id
   );
+  try {
+    newCartItems = yield* call(fetchCartToFirestore, newCartItems, currentUser);
+  } catch (error) {
+    console.log(error);
+  }
   yield* put(setCartItems(newCartItems));
 }
 

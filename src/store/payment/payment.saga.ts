@@ -14,6 +14,7 @@ import {
 import { clearCart } from "../cart/cart.reducer";
 
 import { stripeFetch, paymentConfirm } from "../../utils/stripe/stripe.utils";
+import { addCartItemsToFirestore } from "../../utils/firebase/firebase.utils";
 
 const ifValidCardElement = (
   card: StripeCardElement | null
@@ -51,6 +52,9 @@ export function* startPayment({ payload }: PayloadAction<DataForPayment>) {
     } else {
       if (paymentResult.paymentIntent.status === "succeeded") {
         yield* put(clearCart());
+        if (currentUser) {
+          yield* call(addCartItemsToFirestore, [], currentUser.id);
+        }
         yield* put(
           paymentSuccessful({ ...paymentDetails, paymentNumber: created })
         );

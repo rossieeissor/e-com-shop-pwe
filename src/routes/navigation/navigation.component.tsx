@@ -1,6 +1,8 @@
 import { Outlet } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
+import crwnLogo from "../../assets/Logo.png";
+
 import CartIcon from "../../components/cart-icon/cart-icon.component";
 import CartDropdown from "../../components/cart-dropdown/cart-dropdown.component";
 
@@ -10,7 +12,7 @@ import { signOutstart } from "../../store/user/user.reducer";
 
 import {
   NavigationContainer,
-  Logo,
+  LogoContainer,
   NavLinks,
   Navlink,
   DisplayName,
@@ -27,24 +29,31 @@ const Navigation = () => {
 
   return (
     <>
-      <NavigationContainer>
-        <Logo to="/" />
-        {currentUser && (
-          <DisplayName>Hello, {currentUser.displayName}! </DisplayName>
-        )}
-        <NavLinks>
-          <Navlink to="/shop">SHOP</Navlink>
-          {currentUser ? (
-            <Navlink as="span" onClick={signOutHandler}>SIGN OUT</Navlink>
-          ) : (
-            <Navlink to="/auth">SIGN IN</Navlink>
+      <header>
+        <NavigationContainer>
+          <LogoContainer to="/">
+            <img src={crwnLogo} alt="easy logo" />
+          </LogoContainer>
+          {currentUser && (
+            <DisplayName>Hello, {currentUser.displayName}! </DisplayName>
           )}
-          <CartIcon />
-        </NavLinks>
-        {isCartOpen && <CartDropdown />}
-      </NavigationContainer>
-      <Outlet />
+          <NavLinks>
+          <li><Navlink to="/shop">SHOP</Navlink></li>
+            {currentUser ? (
+              <li><Navlink as="span" onClick={signOutHandler}>SIGN OUT</Navlink></li>
+            ) : (
+              <li><Navlink to="/auth">SIGN IN</Navlink></li>
+            )}
+            <li><CartIcon /></li>
+          </NavLinks>
+          {isCartOpen && <CartDropdown />}
+        </NavigationContainer>
+      </header>
+      <main>
+        <Outlet />
+      </main>
     </>
+    
   );
 };
 

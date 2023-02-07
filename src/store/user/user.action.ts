@@ -6,7 +6,7 @@ import {
 } from "../../utils/reducer/reducer.utils";
 import { AdditionlInfo } from "../../utils/firebase/firebase.utils";
 
-type CheckUserSession = Action<USER_ACTION_TYPES.CHECK_USER_SESSION>;
+export type CheckUserSession = Action<USER_ACTION_TYPES.CHECK_USER_SESSION>;
 
 export const checkUserSession = (): CheckUserSession =>
   createAction(USER_ACTION_TYPES.CHECK_USER_SESSION);

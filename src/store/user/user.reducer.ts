@@ -17,7 +17,7 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    signInSuccess(state, action: PayloadAction<UserData & { id: string }>) {
+    signInSuccess(state, action: PayloadAction<UserData>) {
       state.currentUser = action.payload;
       state.isLoading = false;
     },
